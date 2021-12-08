@@ -1,0 +1,75 @@
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js">
+<link rel="stylesheet" href="{% static 'css/hero.css' %}">
+{% endblock %}
+<section class="hero section-home" id="hero">
+    <div class="container main">
+        <div class="content-card">
+            <h2 class="head-content">
+              <div class="banner">
+                <div class="wrap">
+                  <div class="banner-title">GET YOUR PERFECT ESSAY WRITTEN BY EXPERTS</div>
+                  <div class="banner-text">We save your time in the learning process.
+                    Anonymously. Qualitatively. Fast.</div>
+
+                  <form action="" class="banner-calculator" method="post">
+                    {% csrf_token %}
+                    <div class="banner-calculator__content"><div class="banner-calculator__title">PLACE YOUR ORDER</div>
+                      <div class="calculator">
+                        <div class="workcomplexicity" id="workcomplexicity">
+                          <p>COMPLEXITY</p>
+                          <select name="academicLevel" id="calc2">
+                            {% for value in form.complexity %}
+                            <option value="{{ value }}"></option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div>
+                          <p>TYPE OF WORK</p>
+                          <select name="typeOfPaper" id="calc1">
+                            {% for value in form.type_of_work %}
+                            <option value="{{ value }}"></option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-bottom">
+                          <div class="deadline">
+                            <p>DEADLINE</p>
+                            <select name="deadline" id="calc3">
+                              {% for time in form.deadline %}
+                    
+                              <option value="{{ time }}"></option>
+                              
+                              {% endfor %}
+                              <i class="fas fa-calender" aria-hidden="true"></i>
+                              </div>
+                              
+                            </select>
+                          </div>
+                          <div class="page-count">
+                            <p class="page-count-p"><span class="label_calc4">PAGE</span> TOTAL</p>
+                            <ul onmousedown="return false" onselectstart="return false">
+                              <li><a class="page-counter_minus"> <i class="fas fa-minus"></i> </a></li>
+                              <li><input type="text" name="page" id="calc4" value="1" size="2" maxlength="3" onkeyup="return check(this);" onchange="return check(this);"></li>
+                              <li><a class="page-counter_plus"> <i class="fas fa-plus"></i> </a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="banner-calculator__total">
+                        <span><p>Total:</p>
+                          <p class="continue-price"><span>$</span> 11.00</p></span>
+                        <button type="submit" >PROCEED</button>
+                      </div>
+                    </form>
+                    </div>
+                 </div>
+              </div>
+            </span>
+            </span>
+            </h2>
+        </div>
+    </div>
+</section>

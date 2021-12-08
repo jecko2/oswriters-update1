@@ -1,12 +1,17 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, AssignmentForm
+from django.views.generic.edit import FormView
+from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Task, CustomUser
+from django.views.generic import View
+from .models import CustomUser, FirstOrder
 from django.conf import settings
+from .forms import ContactUsForm, FormOrderOne, FormOrderTwo
 from django.views.generic import (
     CreateView,
+    DetailView,
+    TemplateView
 )
 
 
@@ -20,41 +25,43 @@ class SignUpForm(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'account/signup.html'
 
-
-# def userSignup(request):
-#     if request.method == "POST":
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             messages.success(request, "Registration successful")
-#             return redirect('home')
-#         messages.error(request, 'Unsuccessful signup. Cross-check the information')
-#     form = CustomUserCreationForm()
-#     return render(request, 'account/signup.html', {"form": form})
-
-
-# @login_required
-# def task_details(request):
-#     if request.method == 'POST':
-#         form = AssignmentForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             user = Task.client
-#             form.save()
-#             user.save_form_data()
-#             return redirect('home')
-#     else:
-#         form = AssignmentForm()
-#     return render(request, 'front/task.html', {
-#         'form': form
-#     })
-
-
-class CreateAssignmentInstance(LoginRequiredMixin, CreateView):
-    form_class = AssignmentForm
-    template_name = 'front/task.html'
-    success_url = reverse_lazy('home')
-
     def form_valid(self, form):
         form.instance.client = self.request.user
         return super().form_valid(form)
+
+
+class ContactUsFormView(View):
+    def get(self, *args, **kwargs):
+        form = ContactUsForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, 'front/home.html', context)
+
+    def post(self, *args, **kwargs):
+        form = ContactUsForm(self.request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            messages.warning(self.request, "Your message was sent successfully")
+            print('This form is valid')
+            return redirect('home')
+        return render(self.request, 'front/home.html', {'form': form})
+
+
+class ViewFormOrder(FormView):
+    template_name = 'front/order1.html'
+    form_class = FormOrderOne
+    success_url = 'commit'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+class ViewFormOrder2(FormView):
+    template_name = 'front/order2.html'
+    form_class = FormOrderTwo
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+

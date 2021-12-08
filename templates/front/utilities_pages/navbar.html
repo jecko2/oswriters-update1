@@ -12,7 +12,7 @@
             </a>
         </div>
         <div class="phone-box">
-            <a href="" class="phone-call">
+            <a href="tel:+254113000799" class="phone-call">
                 <i class="fas fa-phone"></i> <span>Call Us</span>
             </a>
         </div>
@@ -49,10 +49,12 @@
                 <li class="nav-item">
                     <a href="" class="nav-link">Services</a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" >contact</a>
+                </li>
                 {% if user.is_authenticated  %}
                 <li class="nav-item">
-                    <a href="{% url 'task-upload' %}" class="nav-link" id="order">Order Paper</a>
+                    <a href="{% url 'place-order' %}" class="nav-link" id="orders">Order Paper</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'account_logout' %}" class="nav-link">

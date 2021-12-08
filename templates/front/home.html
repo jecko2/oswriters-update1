@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="{% static 'css/hero.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/base_css_home_page/contact.css' %}">
+
 {% endblock %}
 
 {% block navbar %}
@@ -14,15 +16,90 @@
 {% endblock %}
 
 {% block content %}
-    <section class="hero section-home" id="hero">
-        <div class="container main">
-            <div class="content-card">
-                <h2 class="head-content">Welcome to <span class="animate-head">
-                    Os <span inner-animate>Writers</span>
-                </span>
-                </h2>
+        <!-- section hero  -->
+    
+        {% block hero %}
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+      </form>
+        {% endblock %}
+
+
+    <!-- cotact section -->
+    {% block contact %}
+
+    <section id="contact" class="contact">
+        <div class="container">
+    
+          <div class="section-title" data-aos="fade-down">
+            <h2 class="header-contact" style="text-align: center; margin-bottom: 1rem;">
+                Get In Touch With Us
+            </h2>
+          </div>
+    
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-12" data-aos="fade-up" data-aos-delay="100">
+              <div class="info-box">
+                <i class="fas fa-map-marked"></i>
+                <h3>Our Address</h3>
+                <p>Lithuli Avenue <br>00100 Nairobi Kenya</p>
+              </div>
             </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="400">
+              <div class="info-box">
+                <i class="fas fa-envelope-open"></i>
+                <h3>Email Us</h3>
+                <p>info@oswriters.com<br>helpdesk@oswriters.com</p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-lg-0" data-aos="fade-down" data-aos-delay="600">
+              <div class="info-box">
+                <i  class="fas fa-phone-volume"></i>
+                <h3>Call Us Now</h3>
+                <p>+254745547755<br>+254113000799</p>
+              </div>
+            </div>
+          </div>
+    
+          <form action="{% url 'contact-us' %}" method="POST" role="form" class="django-form-contact mt-4" data-aos="fade-up" data-aos-delay="800">
+            {% csrf_token %}
+            <div class="row"> 
+                <div class="col-md-6 form-group">
+                    {{ form.name }}
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                    {{ form.email }}
+                </div>
+            </div>
+                <div class="form-group mt-3">
+                    {{ form.subject }}
+                </div>
+                <div class="form-group mt-3">
+                    {{ form.message }}
+                </div>
+            <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+                </div>
+            <div class="text-center">
+                <button type="submit" style="width: 100%;" role="link">Chart Us Now</button>
+            </div>
+        </form>
         </div>
-    </section>
+      </section>
+    
+
+    {% endblock %}
+
+    <!-- section footer: more sections will be added later -->
+
+    {% block footer %}
+
+    {% include 'front/page_utilities-main/footer_main.html' %}
+
+    {% endblock %}
+
 {% endblock %}
 

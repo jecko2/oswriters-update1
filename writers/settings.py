@@ -177,7 +177,7 @@ AUTH_USER_MODEL = 'general.CustomUser'
 # email backend
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # allauth basic config
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_REQUIRED = True

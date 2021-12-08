@@ -41,7 +41,6 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(_('email address'), unique=True)
-    subject = models.ManyToManyField('Task')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -51,44 +50,95 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-class Task(models.Model):
-    SUBJECT_CHOICE = (
-        ('MR', 'Movie Review'),
-        ('EW', 'Essay Writing'),
-        ('TW', 'Thesis Writing'),
-        ('DW', 'Dissertation Writing'),
-        ('AW', 'Assignment Writing'),
-        ('PS', 'Personal Statement'),
-        ('CSW', 'Case Study Writing'),
-        ('CPW', 'Capstone Project Writing'),
-        ('SW', 'Speech Writing'),
-        ('LRW', 'Lab Report Writing'),
+class FirstOrder(models.Model):
+    COMPLEXITY_CHOICES = (
+        ('HG', 'High School'),
+        ('CL', 'College'),
+        ('UG', 'Undergraduate'),
+        ('MS', 'Masters'),
+        ('PHD', 'PhD')
     )
-    ACADEMIC_LEVEL = (
-        ('HS', 'High School'),
-        ("CL", 'College'),
-        ("UG", 'Undergraduate'),
-        ('PM', 'PostGraduate-Masters'),
-        ('PPH', 'PostGraduate-Phd'),
+    TYPE_OF_WORK = (
+        ('AE', 'Admission Essay'),
+        ('Bio', 'Biographies'),
+        ('BP', 'Business Plan'),
+        ('BR', 'Book Review')
+    )
+    DEADLINE = (
+        ('14D', '14 Days'),
+        ('10D', '10 Days'),
+        ('7D', '7 Days'),
+        ('6D', '6 Days'),
+        ('5D', '5 Days'),
+        ('4D', '4 Days'),
+        ('3D', '3 Days'),
+        ('2D', '2 Days'),
+        ('1D', '1 Days'),
+        ('20H', '20 Hours'),
+        ('16H', '16 Hours'),
+        ('12H', '12 Hours'),
+        ('8H', '8 Hours'),
+        ('6H', '6 Hours'),
+        ('5H', '5 Hours'),
+        ('3H', '3 Hours'),
+        ('2H', '2 Hours'),
     )
     client = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        null=False,
-        blank=False,
+        CustomUser,
         on_delete=models.CASCADE
     )
-    subject = models.CharField(max_length=100, choices=SUBJECT_CHOICE)
-    academic_level = models.CharField(max_length=300, choices=ACADEMIC_LEVEL)
-    pages = models.PositiveIntegerField()
-    word_count = models.PositiveIntegerField()
-    additional_files = models.FileField(upload_to='media', blank=True, null=True,)
-    images = models.FileField(upload_to='media', blank=True, null=True)
-    price = models.DecimalField(max_digits=1000000, decimal_places=2)
-    start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now_add=False, blank=True, null=True)
-    
+    complexity = models.CharField(max_length=100, choices=COMPLEXITY_CHOICES)
+    type_of_work = models.CharField(max_length=100, choices=TYPE_OF_WORK)
+    deadline = models.CharField(max_length=100, choices=DEADLINE)
+    order_date = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return str(self.client)
+        return self.complexity
+
+
+class SecondOrder(models.Model):
+    SUBJECT = (
+        ('OT', 'Other'),
+        ('ACC', 'Account'),
+        ('CL', 'Criminal Law')
+    )
+    REFERENCE_STYLE = (
+        ('H', 'Harvard'),
+        ('A', 'APA'),
+        ('M', 'MLA'),
+        ('C', 'Chicago'),
+        ('V', 'Vancouver')
+    )
+    order_form = models.ForeignKey(FirstOrder, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100, choices=SUBJECT)
+    number_of_pages = models.CharField(max_length=300)
+    double_spaced = models.BooleanField(default=False)
+    reference_style = models.CharField(max_length=100, choices=REFERENCE_STYLE)
+    reference_total = models.IntegerField(default=1)
+    order_instruction = models.TextField(blank=True, null=True)
+    additional_materials = models.FileField(upload_to='media/', blank=True, null=True)
+    pricing = models.DecimalField(max_digits=7, decimal_places=2)
+
+    def __str__(self):
+        return self.subject
+
+
+class ExtraServices(models.Model):
+    EXTRA_TASK = (
+        ('PPT', 'PowerPoint'),
+        ('PS', 'PhotoShop'),
+        ('IG', 'InfoGraph'),
+        ('WB', 'Web Design')
+    )
+    client = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE
+    )
+    extra_task = models.CharField(max_length=100, choices=EXTRA_TASK)
+    pricing = models.DecimalField(max_digits=7, decimal_places=2)
+
+    def __str__(self):
+        return self.extra_task
 
 
 
